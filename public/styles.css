@@ -26,7 +26,7 @@ body {
 }
 
 .container {
-  max-width: 1600px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 0 28px;
 }
@@ -84,7 +84,7 @@ body {
 /* Двухколоночный макет: товары слева, инфо-блоки справа */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1100px) 360px;
+  grid-template-columns: minmax(0, 1200px) 360px;
   justify-content: space-between;
   gap: 24px;
   align-items: start;
@@ -133,8 +133,8 @@ body {
 /* Product grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
 }
 .product {
   background: var(--card);
@@ -155,10 +155,10 @@ body {
   display: flex; align-items: center; justify-content: center;
   color: var(--muted); font-size: 0.85rem;
 }
-.product-body { padding: 14px 16px; }
-.product-body h3 { margin: 0 0 6px; font-size: 1.05rem; }
-.price { color: var(--accent); font-weight: 700; font-size: 1.05rem; }
-.desc { margin: 8px 0 0; color: var(--muted); font-size: 0.9rem; white-space: pre-wrap; }
+.product-body { padding: 11px 13px; }
+.product-body h3 { margin: 0 0 5px; font-size: 0.95rem; line-height: 1.25; }
+.price { color: var(--accent); font-weight: 700; font-size: 0.98rem; }
+.desc { margin: 6px 0 0; color: var(--muted); font-size: 0.82rem; white-space: pre-wrap; }
 
 .empty { color: var(--muted); }
 
