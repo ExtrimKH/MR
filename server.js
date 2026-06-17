@@ -156,7 +156,12 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 12 }, // 12 часов
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 12, // 12 часов
+      httpOnly: true, // cookie недоступна из JavaScript (защита от XSS-кражи)
+      sameSite: "lax", // защита от CSRF
+      secure: "auto", // только по HTTPS на хостинге, но работает и локально
+    },
   })
 );
 
@@ -170,6 +175,33 @@ app.get("/admin", (req, res) => {
 function requireAuth(req, res, next) {
   if (req.session && req.session.isAdmin) return next();
   return res.status(401).json({ error: "Требуется вход" });
+}
+
+// ---- Защита входа от перебора пароля ----
+const loginAttempts = new Map(); // ip -> { count, first, blockedUntil }
+const MAX_ATTEMPTS = 8;
+const WINDOW_MS = 15 * 60 * 1000; // 15 минут
+
+function loginLimiter(req, res, next) {
+  const rec = loginAttempts.get(req.ip);
+  if (rec && rec.blockedUntil && Date.now() < rec.blockedUntil) {
+    const mins = Math.ceil((rec.blockedUntil - Date.now()) / 60000);
+    return res
+      .status(429)
+      .json({ error: `Слишком много попыток. Подождите ${mins} мин.` });
+  }
+  next();
+}
+
+function recordFail(ip) {
+  const now = Date.now();
+  let rec = loginAttempts.get(ip);
+  if (!rec || now - rec.first > WINDOW_MS) {
+    rec = { count: 0, first: now, blockedUntil: 0 };
+  }
+  rec.count++;
+  if (rec.count >= MAX_ATTEMPTS) rec.blockedUntil = now + WINDOW_MS;
+  loginAttempts.set(ip, rec);
 }
 
 const RARITIES = ["None", "Epic", "Legendary"];
@@ -214,11 +246,13 @@ app.get("/api/info", (req, res) => {
 });
 
 // ---- Вход в админку ----
-app.post("/api/login", (req, res) => {
+app.post("/api/login", loginLimiter, (req, res) => {
   if (req.body.password === ADMIN_PASSWORD) {
+    loginAttempts.delete(req.ip); // сброс при успехе
     req.session.isAdmin = true;
     return res.json({ ok: true });
   }
+  recordFail(req.ip);
   res.status(401).json({ error: "Неверный пароль" });
 });
 
