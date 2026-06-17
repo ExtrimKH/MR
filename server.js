@@ -197,6 +197,9 @@ function normalize(value, allowed) {
 // Обёртка, чтобы ошибки из async-обработчиков попадали в общий handler
 const wrap = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
+// Лёгкая проверка живости (для аптайм-монитора, чтобы сайт не засыпал)
+app.get("/ping", (req, res) => res.type("text").send("ok"));
+
 // ---- Публичные API ----
 app.get("/api/products", (req, res) => {
   res.json(db.products.filter((p) => !p.hidden));
