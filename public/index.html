@@ -18,42 +18,84 @@
   </header>
 
   <main class="container">
-    <section class="info-block" id="info-block">
-      <div class="info-card">
-        <h2>Как это работает</h2>
-        <p id="how-it-works"></p>
-      </div>
-      <div class="info-card">
-        <h2>Куда отправлять машину</h2>
-        <p id="where-to-send"></p>
-      </div>
-    </section>
+    <div class="layout">
+      <!-- Левая колонка: товары -->
+      <div class="content">
+        <h2 class="section-title">Товары</h2>
 
-    <h2 class="section-title">Товары</h2>
+        <div class="filters">
+          <label>Редкость
+            <select id="filter-rarity">
+              <option value="">Все</option>
+              <option value="None">None</option>
+              <option value="Epic">Epic</option>
+              <option value="Legendary">Legendary</option>
+            </select>
+          </label>
+          <label>Тип машины
+            <select id="filter-type">
+              <option value="">Все</option>
+              <option value="None">None</option>
+              <option value="Road">Road</option>
+              <option value="Sport">Sport</option>
+              <option value="Muscle">Muscle</option>
+              <option value="Vintage">Vintage</option>
+            </select>
+          </label>
+        </div>
 
-    <div class="filters">
-      <label>Редкость
-        <select id="filter-rarity">
-          <option value="">Все</option>
-          <option value="None">None</option>
-          <option value="Epic">Epic</option>
-          <option value="Legendary">Legendary</option>
-        </select>
-      </label>
-      <label>Тип машины
-        <select id="filter-type">
-          <option value="">Все</option>
-          <option value="None">None</option>
-          <option value="Road">Road</option>
-          <option value="Sport">Sport</option>
-          <option value="Muscle">Muscle</option>
-          <option value="Vintage">Vintage</option>
-        </select>
-      </label>
+        <div id="products" class="grid"></div>
+        <p id="empty" class="empty" hidden>Пока нет товаров.</p>
+      </div>
+
+      <!-- Правая колонка: информационные блоки -->
+      <aside class="sidebar">
+        <div class="info-card">
+          <h2>Как купить товар?</h2>
+          <p>Выберите интересующий вас товар и пришлите скриншот админу —
+            <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
+          <ul>
+            <li>Оплатите интересующий товар</li>
+            <li>Пришлите машину, совместимую с запчастью</li>
+            <li>Админ установит запчасть на вашу машину</li>
+            <li>Пришлёт машину обратно на ваш кошелёк</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2>Как продать товар?</h2>
+          <p>Чтобы продать деталь, напишите админу —
+            <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
+          <ul>
+            <li>Пришлите машину с продаваемой запчастью</li>
+            <li>Админ снимет запчасть и пришлёт машину обратно</li>
+            <li>Админ выплатит стоимость товара/машины</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2>Что мы покупаем?</h2>
+          <ul>
+            <li>Любая <span class="rar rar-epic">Epic</span> запчасть — <b>0.01 $SOL</b></li>
+            <li>Любая <span class="rar rar-leg">Legendary</span> запчасть — <b>0.025 $SOL</b></li>
+            <li>Любая машина <b>Rare+</b> редкости — <b>0.15 $SOL</b></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2>Описание</h2>
+          <p>Racers Shop — быстрый и удобный магазин товаров в игре Meta Racing.
+            Создан, чтобы игроки могли комфортно покупать детали и другие активы
+            в проекте Meta Racing по приятным ценам без риска обмана.</p>
+          <p>Магазин основан админом сообщества METAGOATS. Мы совместно играем
+            в различные Web3-игры.</p>
+          <ul class="links">
+            <li>Наш канал: <a href="https://t.me/metagoats" target="_blank" rel="noopener">t.me/metagoats</a></li>
+            <li>Наш чат: <a href="https://t.me/goats_chat" target="_blank" rel="noopener">t.me/goats_chat</a></li>
+          </ul>
+        </div>
+      </aside>
     </div>
-
-    <div id="products" class="grid"></div>
-    <p id="empty" class="empty" hidden>Пока нет товаров.</p>
   </main>
 
   <footer class="site-footer">

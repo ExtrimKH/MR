@@ -1,13 +1,7 @@
 let allProducts = [];
 
 async function load() {
-  const [products, info] = await Promise.all([
-    fetch("/api/products").then((r) => r.json()),
-    fetch("/api/info").then((r) => r.json()),
-  ]);
-
-  document.getElementById("how-it-works").textContent = info.howItWorks || "";
-  document.getElementById("where-to-send").textContent = info.whereToSend || "";
+  const products = await fetch("/api/products").then((r) => r.json());
 
   allProducts = products;
   document
