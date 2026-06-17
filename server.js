@@ -184,6 +184,12 @@ app.use(
   })
 );
 
+// API-ответы не кэшировать — чтобы сайт всегда показывал свежие данные
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 app.use("/uploads", express.static(UPLOADS_DIR));
 app.use(express.static(path.join(__dirname, "public")));
 
