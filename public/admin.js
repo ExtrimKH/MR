@@ -211,6 +211,53 @@ productForm.addEventListener("submit", async (e) => {
   }
 });
 
+// ---- Бокс загрузки фото (превью + перетаскивание) ----
+const dropzone = document.getElementById("dropzone");
+const imageInput = document.getElementById("image");
+const dzEmpty = document.getElementById("dz-empty");
+const dzPreview = document.getElementById("dz-preview");
+const dzClear = document.getElementById("dz-clear");
+
+function showPreview(src) {
+  dzPreview.src = src;
+  dzPreview.hidden = false;
+  dzEmpty.hidden = true;
+  dzClear.hidden = false;
+}
+function clearPreview() {
+  dzPreview.removeAttribute("src");
+  dzPreview.hidden = true;
+  dzEmpty.hidden = false;
+  dzClear.hidden = true;
+}
+
+imageInput.addEventListener("change", () => {
+  const f = imageInput.files[0];
+  if (f) showPreview(URL.createObjectURL(f));
+});
+dzClear.addEventListener("click", () => {
+  imageInput.value = "";
+  clearPreview();
+});
+["dragover", "dragenter"].forEach((ev) =>
+  dropzone.addEventListener(ev, (e) => {
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  })
+);
+["dragleave", "dragend"].forEach((ev) =>
+  dropzone.addEventListener(ev, () => dropzone.classList.remove("dragover"))
+);
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith("image/")) {
+    imageInput.files = e.dataTransfer.files;
+    showPreview(URL.createObjectURL(f));
+  }
+});
+
 function startEdit(id, products) {
   const p = products.find((x) => x.id === id);
   if (!p) return;
@@ -225,7 +272,9 @@ function startEdit(id, products) {
   document.getElementById("wallet").value = p.wallet || "";
   document.getElementById("nick").value = p.nick || "";
   document.getElementById("comment").value = p.comment || "";
-  document.getElementById("image").value = "";
+  imageInput.value = "";
+  if (p.image) showPreview(p.image);
+  else clearPreview();
   document.getElementById("product-form-title").textContent = "Изменить товар";
   document.getElementById("save-product-btn").textContent = "Сохранить";
   document.getElementById("cancel-edit-btn").hidden = false;
@@ -236,6 +285,7 @@ document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
 
 function resetForm() {
   productForm.reset();
+  clearPreview();
   document.getElementById("edit-id").value = "";
   document.getElementById("product-form-title").textContent = "Добавить товар";
   document.getElementById("save-product-btn").textContent = "Добавить";

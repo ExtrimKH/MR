@@ -377,6 +377,56 @@ button.danger { background: var(--danger); color: #fff; }
 button.danger:hover { background: #dc2626; }
 
 .form-actions { display: flex; gap: 10px; }
+
+/* Форма товара: поля в два столбца + бокс загрузки справа */
+.pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  gap: 20px;
+  align-items: start;
+}
+.pf-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  align-content: start;
+}
+.pf-fields label { margin: 0; }
+.pf-fields .pf-full { grid-column: 1 / -1; }
+
+.pf-photo { display: flex; flex-direction: column; gap: 8px; }
+.dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 210px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  padding: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.dropzone:hover,
+.dropzone.dragover {
+  border-color: var(--accent);
+  background: rgba(251, 191, 36, 0.08);
+}
+.dz-empty { color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+.dz-icon { font-size: 2rem; margin-bottom: 6px; }
+#dz-preview {
+  max-width: 100%;
+  max-height: 260px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+@media (max-width: 720px) {
+  .pf-grid { grid-template-columns: 1fr; }
+  .pf-fields { grid-template-columns: 1fr; }
+}
 .toolbar { display: flex; justify-content: flex-end; margin-top: 16px; }
 
 .hint { color: var(--muted); font-size: 0.8rem; margin: -6px 0 12px; }

@@ -84,70 +84,84 @@
 
       <div class="panel">
         <h2 id="product-form-title">Добавить товар</h2>
-        <form id="product-form">
+        <form id="product-form" class="product-form">
           <input type="hidden" id="edit-id" />
-          <label>Название
-            <input type="text" id="title" required />
-          </label>
-          <label>Цена в $SOL (только число)
-            <input type="text" id="price" placeholder="например, 0.3" />
-          </label>
-          <label>Тип товара
-            <select id="productType">
-              <option value="None">None</option>
-              <option value="Машина">Машина</option>
-              <option value="Деталь">Деталь</option>
-              <option value="Карточка">Карточка</option>
-            </select>
-          </label>
-          <label>Тип детали
-            <select id="partType">
-              <option value="None">None</option>
-              <option value="Roof">Roof</option>
-              <option value="Headlights">Headlights</option>
-              <option value="Grill">Grill</option>
-              <option value="Rims">Rims</option>
-              <option value="Hood">Hood</option>
-              <option value="Sideskirts">Sideskirts</option>
-              <option value="Mirrors">Mirrors</option>
-              <option value="Fenders">Fenders</option>
-              <option value="Bumper">Bumper</option>
-              <option value="Wing">Wing</option>
-            </select>
-          </label>
-          <label>Редкость
-            <select id="rarity">
-              <option value="None">None</option>
-              <option value="Epic">Epic</option>
-              <option value="Legendary">Legendary</option>
-            </select>
-          </label>
-          <label>Тип машины
-            <select id="carType">
-              <option value="None">None</option>
-              <option value="Road">Road</option>
-              <option value="Sport">Sport</option>
-              <option value="Muscle">Muscle</option>
-              <option value="Vintage">Vintage</option>
-            </select>
-          </label>
-          <label>Описание
-            <textarea id="description" rows="3"></textarea>
-          </label>
-          <label>Фото
-            <input type="file" id="image" accept="image/*" />
-          </label>
+          <div class="pf-grid">
+            <div class="pf-fields">
+              <label class="pf-full">Название
+                <input type="text" id="title" required />
+              </label>
+              <label>Цена, $SOL
+                <input type="text" id="price" placeholder="например, 0.3" />
+              </label>
+              <label>Тип товара
+                <select id="productType">
+                  <option value="None">None</option>
+                  <option value="Машина">Машина</option>
+                  <option value="Деталь">Деталь</option>
+                  <option value="Карточка">Карточка</option>
+                </select>
+              </label>
+              <label>Тип детали
+                <select id="partType">
+                  <option value="None">None</option>
+                  <option value="Roof">Roof</option>
+                  <option value="Headlights">Headlights</option>
+                  <option value="Grill">Grill</option>
+                  <option value="Rims">Rims</option>
+                  <option value="Hood">Hood</option>
+                  <option value="Sideskirts">Sideskirts</option>
+                  <option value="Mirrors">Mirrors</option>
+                  <option value="Fenders">Fenders</option>
+                  <option value="Bumper">Bumper</option>
+                  <option value="Wing">Wing</option>
+                </select>
+              </label>
+              <label>Редкость
+                <select id="rarity">
+                  <option value="None">None</option>
+                  <option value="Epic">Epic</option>
+                  <option value="Legendary">Legendary</option>
+                </select>
+              </label>
+              <label>Тип машины
+                <select id="carType">
+                  <option value="None">None</option>
+                  <option value="Road">Road</option>
+                  <option value="Sport">Sport</option>
+                  <option value="Muscle">Muscle</option>
+                  <option value="Vintage">Vintage</option>
+                </select>
+              </label>
+              <label class="pf-full">Описание
+                <textarea id="description" rows="3"></textarea>
+              </label>
 
-          <p class="hint" style="margin-top:4px">🔒 Поля ниже видны только в админке и НЕ показываются на сайте:</p>
-          <label>Кошелёк
-            <input type="text" id="wallet" />
-          </label>
-          <label>Ник
-            <input type="text" id="nick" />
-          </label>
-          <label>Комментарий
-            <input type="text" id="comment" />
-          </label>
+              <p class="hint pf-full" style="margin:2px 0 0">🔒 Видно только в админке, на сайт не попадает:</p>
+              <label>Кошелёк
+                <input type="text" id="wallet" />
+              </label>
+              <label>Ник
+                <input type="text" id="nick" />
+              </label>
+              <label class="pf-full">Комментарий
+                <input type="text" id="comment" />
+              </label>
+            </div>
+
+            <div class="pf-photo">
+              <label class="dropzone" id="dropzone">
+                <input type="file" id="image" accept="image/*" hidden />
+                <div class="dz-empty" id="dz-empty">
+                  <div class="dz-icon">🖼️</div>
+                  <div>Нажми или перетащи<br />фото сюда</div>
+                </div>
+                <img id="dz-preview" alt="" hidden />
+              </label>
+              <button type="button" id="dz-clear" class="secondary" hidden>Убрать фото</button>
+            </div>
+          </div>
+
           <div class="form-actions">
             <button type="submit" id="save-product-btn">Добавить</button>
             <button type="button" id="cancel-edit-btn" class="secondary" hidden>Отмена</button>
