@@ -37,6 +37,43 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
   location.reload();
 });
 
+// ---- Бэкап ----
+document.getElementById("export-btn").addEventListener("click", () => {
+  window.location.href = "/api/admin/export";
+});
+
+document.getElementById("import-btn").addEventListener("click", () => {
+  document.getElementById("import-file").click();
+});
+
+document.getElementById("import-file").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const msg = document.getElementById("backup-msg");
+  if (!confirm("Восстановить данные из файла? Текущие товары и тексты будут заменены.")) {
+    e.target.value = "";
+    return;
+  }
+  try {
+    const data = JSON.parse(await file.text());
+    const res = await fetch("/api/admin/import", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || "Ошибка");
+    msg.textContent = `Восстановлено товаров: ${out.count} ✓`;
+    msg.hidden = false;
+    loadInfo();
+    loadProducts();
+  } catch (err) {
+    msg.textContent = "Не удалось восстановить: " + err.message;
+    msg.hidden = false;
+  }
+  e.target.value = "";
+});
+
 // ---- Тексты ----
 async function loadInfo() {
   const info = await fetch("/api/info").then((r) => r.json());

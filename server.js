@@ -100,6 +100,25 @@ async function saveDB(database) {
   fs.writeFileSync(DB_FILE, JSON.stringify(database, null, 2), "utf8");
 }
 
+// Автоматический бэкап: снимок данных (хранится 7 штук с ротацией)
+async function makeBackup() {
+  const snapshot = JSON.stringify({ at: Date.now(), data: db });
+  if (USE_REDIS) {
+    const slot = new Date().getDay(); // 0..6 — ротация по дням недели
+    await redisCommand(["SET", `${DATA_KEY}:backup:${slot}`, snapshot]);
+  } else {
+    const dir = path.join(DATA_DIR, "backups");
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const stamp = new Date().toISOString().slice(0, 10);
+    fs.writeFileSync(path.join(dir, `db-${stamp}.json`), snapshot, "utf8");
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".json"))
+      .sort();
+    while (files.length > 7) fs.unlinkSync(path.join(dir, files.shift()));
+  }
+}
+
 let db = defaultDB(); // заполнится в init()
 
 // ---- Хранение картинок (локально диск / в облаке Cloudinary) ----
@@ -150,7 +169,7 @@ async function deleteImage(product) {
 
 // ---- Middleware ----
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -240,6 +259,34 @@ app.get("/api/products", (req, res) => {
 app.get("/api/admin/products", requireAuth, (req, res) => {
   res.json(db.products);
 });
+
+// Скачать бэкап (файл JSON)
+app.get("/api/admin/export", requireAuth, (req, res) => {
+  const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="backup-${stamp}.json"`
+  );
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.send(JSON.stringify(db, null, 2));
+});
+
+// Восстановить из загруженного бэкапа
+app.post(
+  "/api/admin/import",
+  requireAuth,
+  wrap(async (req, res) => {
+    const incoming = req.body;
+    if (!incoming || !Array.isArray(incoming.products)) {
+      return res.status(400).json({ error: "Неверный файл бэкапа" });
+    }
+    db = incoming;
+    if (!db.info) db.info = defaultDB().info;
+    if (!db.migrations) db.migrations = {};
+    await saveDB(db);
+    res.json({ ok: true, count: db.products.length });
+  })
+);
 
 app.get("/api/info", (req, res) => {
   res.json(db.info);
@@ -386,6 +433,14 @@ async function init() {
     db.migrations.allDetail = true;
   }
   await saveDB(db); // создаём запись/файл, если его не было
+
+  // Автобэкап: сразу при старте и каждые 12 часов
+  makeBackup().catch((e) => console.error("Бэкап:", e.message));
+  setInterval(
+    () => makeBackup().catch((e) => console.error("Бэкап:", e.message)),
+    12 * 60 * 60 * 1000
+  );
+
   app.listen(PORT, () => {
     console.log(`\n  Сайт запущен:  http://localhost:${PORT}`);
     console.log(`  Админка:       http://localhost:${PORT}/admin`);

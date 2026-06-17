@@ -36,6 +36,17 @@
       </div>
 
       <div class="panel">
+        <h2>Бэкап данных</h2>
+        <p class="hint">Копия сохраняется автоматически каждые 12 часов. Здесь можно скачать копию себе или восстановить из файла.</p>
+        <div class="form-actions">
+          <button type="button" id="export-btn">Скачать бэкап</button>
+          <button type="button" id="import-btn" class="secondary">Восстановить из файла</button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden />
+        </div>
+        <span class="saved" id="backup-msg" hidden></span>
+      </div>
+
+      <div class="panel">
         <h2>Блок «Что мы покупаем»</h2>
         <form id="info-form">
           <label>Каждая строка — отдельный пункт списка

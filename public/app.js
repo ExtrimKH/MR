@@ -9,7 +9,7 @@ async function load() {
   renderWeBuy(info.weBuy || "");
 
   allProducts = products;
-  ["filter-rarity", "filter-type", "filter-product", "filter-part"].forEach(
+  ["filter-rarity", "filter-type", "filter-product", "filter-part", "sort"].forEach(
     (id) => document.getElementById(id).addEventListener("change", render)
   );
   render();
@@ -28,6 +28,22 @@ function render() {
       (!product || (p.productType || "None") === product) &&
       (!part || (p.partType || "None") === part)
   );
+
+  const sort = document.getElementById("sort").value;
+  if (sort === "price-asc" || sort === "price-desc") {
+    const num = (v) => {
+      const n = parseFloat(String(v || "").replace(",", "."));
+      return isNaN(n) ? null : n;
+    };
+    filtered.sort((a, b) => {
+      const na = num(a.price);
+      const nb = num(b.price);
+      if (na === null && nb === null) return 0;
+      if (na === null) return 1; // без цены — в конец
+      if (nb === null) return -1;
+      return sort === "price-asc" ? na - nb : nb - na;
+    });
+  }
 
   const grid = document.getElementById("products");
   const empty = document.getElementById("empty");
@@ -52,7 +68,8 @@ function render() {
   );
 }
 
-function card(p) {
+function card(p, i = 0) {
+  const delay = Math.min(i, 14) * 0.04; // лёгкий каскад появления
   const img = p.image
     ? `<img src="${p.image}" alt="" loading="lazy" />`
     : `<div class="no-image">нет фото</div>`;
@@ -65,7 +82,7 @@ function card(p) {
   const rcls =
     p.rarity === "Legendary" ? "r-leg" : p.rarity === "Epic" ? "r-epic" : "";
   return `
-    <article class="product ${rcls}">
+    <article class="product ${rcls}" style="animation-delay:${delay}s">
       <div class="product-img">${img}</div>
       <div class="product-body">
         <h3>${escapeHtml(p.title)}</h3>
