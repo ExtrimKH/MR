@@ -39,6 +39,22 @@
         <button id="logout-btn" class="secondary">Выйти</button>
       </div>
 
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="products">Товары</button>
+        <button class="tab-btn" data-tab="others">Чужое</button>
+      </div>
+
+      <div id="tab-others" hidden>
+        <div class="panel">
+          <h2>Чужое (товары на реализации)</h2>
+          <p class="hint">Заполни верхнюю строку и нажми «Добавить». Записи со статусом «продано» опускаются вниз.</p>
+          <div id="cons-new"></div>
+          <div id="cons-list"></div>
+        </div>
+      </div>
+
+      <div id="tab-products">
+
       <div class="panel">
         <h2>Бэкап данных</h2>
         <p class="hint">Копия сохраняется автоматически каждые 12 часов. Здесь можно скачать копию себе или восстановить из файла.</p>
@@ -129,6 +145,8 @@
         <h2>Товары</h2>
         <div id="admin-products" class="admin-list"></div>
       </div>
+
+      </div><!-- /tab-products -->
     </section>
   </main>
 

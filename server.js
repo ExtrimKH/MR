@@ -60,6 +60,7 @@ for (const dir of [DATA_DIR, UPLOADS_DIR]) {
 function defaultDB() {
   return {
     products: [],
+    consignments: [],
     info: {
       howItWorks:
         "Опишите здесь, как работает сервис: что вы делаете, сроки, условия.",
@@ -247,6 +248,7 @@ const PART_TYPES = [
   "Bumper",
   "Wing",
 ];
+const CONSIGN_STATUS = ["выставлено", "продано"];
 
 function normalize(value, allowed) {
   const v = (value || "").trim();
@@ -267,6 +269,62 @@ app.get("/api/products", (req, res) => {
 app.get("/api/admin/products", requireAuth, (req, res) => {
   res.json(db.products);
 });
+
+// ---- «Чужое» (товары на реализации) — только админ ----
+app.get("/api/admin/consignments", requireAuth, (req, res) => {
+  res.json(db.consignments);
+});
+
+app.post(
+  "/api/admin/consignments",
+  requireAuth,
+  wrap(async (req, res) => {
+    const { wallet, nick, item, comment, paid, status } = req.body;
+    const entry = {
+      id: crypto.randomBytes(8).toString("hex"),
+      wallet: (wallet || "").trim(),
+      nick: (nick || "").trim(),
+      item: (item || "").trim(),
+      comment: (comment || "").trim(),
+      paid: (paid || "").trim(),
+      status: normalize(status, CONSIGN_STATUS),
+      createdAt: Date.now(),
+    };
+    db.consignments.push(entry);
+    await saveDB(db);
+    res.json(entry);
+  })
+);
+
+app.put(
+  "/api/admin/consignments/:id",
+  requireAuth,
+  wrap(async (req, res) => {
+    const e = db.consignments.find((c) => c.id === req.params.id);
+    if (!e) return res.status(404).json({ error: "Запись не найдена" });
+    const { wallet, nick, item, comment, paid, status } = req.body;
+    if (wallet !== undefined) e.wallet = wallet.trim();
+    if (nick !== undefined) e.nick = nick.trim();
+    if (item !== undefined) e.item = item.trim();
+    if (comment !== undefined) e.comment = comment.trim();
+    if (paid !== undefined) e.paid = paid.trim();
+    if (status !== undefined) e.status = normalize(status, CONSIGN_STATUS);
+    await saveDB(db);
+    res.json(e);
+  })
+);
+
+app.delete(
+  "/api/admin/consignments/:id",
+  requireAuth,
+  wrap(async (req, res) => {
+    const i = db.consignments.findIndex((c) => c.id === req.params.id);
+    if (i === -1) return res.status(404).json({ error: "Запись не найдена" });
+    db.consignments.splice(i, 1);
+    await saveDB(db);
+    res.json({ ok: true });
+  })
+);
 
 // Скачать бэкап (файл JSON)
 app.get("/api/admin/export", requireAuth, (req, res) => {
@@ -432,6 +490,7 @@ async function init() {
   if (db.info && db.info.weBuy === undefined) {
     db.info.weBuy = defaultDB().info.weBuy;
   }
+  if (!Array.isArray(db.consignments)) db.consignments = [];
   // Разовая миграция: все текущие товары — «Деталь» (выполняется один раз)
   if (!db.migrations) db.migrations = {};
   if (!db.migrations.allDetail) {

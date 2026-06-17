@@ -237,4 +237,98 @@ function escapeHtml(s) {
   }[c]));
 }
 
+// ---- Вкладки ----
+document.querySelectorAll(".tab-btn").forEach((btn) =>
+  btn.addEventListener("click", () => {
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    document.getElementById("tab-products").hidden = tab !== "products";
+    document.getElementById("tab-others").hidden = tab !== "others";
+    if (tab === "others") loadCons();
+  })
+);
+
+// ---- «Чужое» ----
+async function loadCons() {
+  const list = await fetch("/api/admin/consignments").then((r) => r.json());
+  document.getElementById("cons-new").innerHTML = consRow(null);
+  const sorted = [...list].sort((a, b) => {
+    const sa = a.status === "продано" ? 1 : 0;
+    const sb = b.status === "продано" ? 1 : 0;
+    if (sa !== sb) return sa - sb;
+    return a.createdAt - b.createdAt;
+  });
+  document.getElementById("cons-list").innerHTML = sorted.map(consRow).join("");
+  attachConsHandlers();
+}
+
+function consRow(c) {
+  const isNew = !c;
+  c = c || {};
+  const sold = c.status === "продано";
+  const sel = (v) => (c.status === v ? "selected" : "");
+  return `
+    <div class="cons-row ${isNew ? "cons-row--new" : ""} ${sold ? "is-sold" : ""}" data-id="${c.id || ""}">
+      <label>Кошелёк<input class="c-wallet" value="${escapeHtml(c.wallet || "")}" /></label>
+      <label>Ник<input class="c-nick" value="${escapeHtml(c.nick || "")}" /></label>
+      <label>Что на продаже<input class="c-item" value="${escapeHtml(c.item || "")}" /></label>
+      <label>Комментарий<input class="c-comment" value="${escapeHtml(c.comment || "")}" /></label>
+      <label>Оплачено<input class="c-paid" value="${escapeHtml(c.paid || "")}" /></label>
+      <label>Статус
+        <select class="c-status">
+          <option value="выставлено" ${sel("выставлено") || (isNew ? "selected" : "")}>выставлено</option>
+          <option value="продано" ${sel("продано")}>продано</option>
+        </select>
+      </label>
+      <div class="cons-actions">
+        <button type="button" class="c-save">${isNew ? "Добавить" : "Сохранить"}</button>
+        ${isNew ? "" : '<button type="button" class="c-del danger">Удалить</button>'}
+      </div>
+    </div>`;
+}
+
+function readConsRow(row) {
+  return {
+    wallet: row.querySelector(".c-wallet").value,
+    nick: row.querySelector(".c-nick").value,
+    item: row.querySelector(".c-item").value,
+    comment: row.querySelector(".c-comment").value,
+    paid: row.querySelector(".c-paid").value,
+    status: row.querySelector(".c-status").value,
+  };
+}
+
+function attachConsHandlers() {
+  // новая запись
+  const newRow = document.querySelector("#cons-new .cons-row");
+  newRow.querySelector(".c-save").addEventListener("click", async () => {
+    await fetch("/api/admin/consignments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(readConsRow(newRow)),
+    });
+    loadCons();
+  });
+  // существующие записи
+  document.querySelectorAll("#cons-list .cons-row").forEach((row) => {
+    const id = row.dataset.id;
+    row.querySelector(".c-save").addEventListener("click", async () => {
+      await fetch(`/api/admin/consignments/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(readConsRow(row)),
+      });
+      loadCons();
+    });
+    row.querySelector(".c-del").addEventListener("click", async () => {
+      if (!confirm("Удалить запись?")) return;
+      await fetch(`/api/admin/consignments/${id}`, { method: "DELETE" });
+      loadCons();
+    });
+  });
+}
+
 init();
