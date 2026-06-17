@@ -105,6 +105,10 @@ function badges(p) {
   const items = [];
   if (p.rarity && p.rarity !== "None")
     items.push(`<span class="badge rarity-${p.rarity}">${p.rarity}</span>`);
+  if (p.productType && p.productType !== "None")
+    items.push(`<span class="badge kind">${p.productType}</span>`);
+  if (p.partType && p.partType !== "None")
+    items.push(`<span class="badge type">${p.partType}</span>`);
   if (p.carType && p.carType !== "None")
     items.push(`<span class="badge type">${p.carType}</span>`);
   return items.length ? `<div class="badges">${items.join("")}</div>` : "";
@@ -125,6 +129,8 @@ productForm.addEventListener("submit", async (e) => {
   const fd = new FormData();
   fd.append("title", document.getElementById("title").value);
   fd.append("price", document.getElementById("price").value);
+  fd.append("productType", document.getElementById("productType").value);
+  fd.append("partType", document.getElementById("partType").value);
   fd.append("rarity", document.getElementById("rarity").value);
   fd.append("carType", document.getElementById("carType").value);
   fd.append("description", document.getElementById("description").value);
@@ -151,6 +157,8 @@ function startEdit(id, products) {
   document.getElementById("edit-id").value = p.id;
   document.getElementById("title").value = p.title;
   document.getElementById("price").value = p.price || "";
+  document.getElementById("productType").value = p.productType || "None";
+  document.getElementById("partType").value = p.partType || "None";
   document.getElementById("rarity").value = p.rarity || "None";
   document.getElementById("carType").value = p.carType || "None";
   document.getElementById("description").value = p.description || "";

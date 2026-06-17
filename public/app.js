@@ -9,21 +9,24 @@ async function load() {
   renderWeBuy(info.weBuy || "");
 
   allProducts = products;
-  document
-    .getElementById("filter-rarity")
-    .addEventListener("change", render);
-  document.getElementById("filter-type").addEventListener("change", render);
+  ["filter-rarity", "filter-type", "filter-product", "filter-part"].forEach(
+    (id) => document.getElementById(id).addEventListener("change", render)
+  );
   render();
 }
 
 function render() {
   const rarity = document.getElementById("filter-rarity").value;
   const type = document.getElementById("filter-type").value;
+  const product = document.getElementById("filter-product").value;
+  const part = document.getElementById("filter-part").value;
 
   const filtered = allProducts.filter(
     (p) =>
       (!rarity || (p.rarity || "None") === rarity) &&
-      (!type || (p.carType || "None") === type)
+      (!type || (p.carType || "None") === type) &&
+      (!product || (p.productType || "None") === product) &&
+      (!part || (p.partType || "None") === part)
   );
 
   const grid = document.getElementById("products");
@@ -82,6 +85,10 @@ function badges(p) {
   const items = [];
   if (p.rarity && p.rarity !== "None")
     items.push(`<span class="badge rarity-${p.rarity}">${p.rarity}</span>`);
+  if (p.productType && p.productType !== "None")
+    items.push(`<span class="badge kind">${escapeHtml(p.productType)}</span>`);
+  if (p.partType && p.partType !== "None")
+    items.push(`<span class="badge type">${escapeHtml(p.partType)}</span>`);
   if (p.carType && p.carType !== "None")
     items.push(`<span class="badge type">${escapeHtml(p.carType)}</span>`);
   return items.length ? `<div class="badges">${items.join("")}</div>` : "";

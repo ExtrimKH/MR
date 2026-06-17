@@ -174,6 +174,20 @@ function requireAuth(req, res, next) {
 
 const RARITIES = ["None", "Epic", "Legendary"];
 const CAR_TYPES = ["None", "Road", "Sport", "Muscle", "Vintage"];
+const PRODUCT_TYPES = ["None", "Машина", "Деталь", "Карточка"];
+const PART_TYPES = [
+  "None",
+  "Roof",
+  "Headlights",
+  "Grill",
+  "Rims",
+  "Hood",
+  "Sideskirts",
+  "Mirrors",
+  "Fenders",
+  "Bumper",
+  "Wing",
+];
 
 function normalize(value, allowed) {
   const v = (value || "").trim();
@@ -219,7 +233,8 @@ app.post(
   requireAuth,
   upload.single("image"),
   wrap(async (req, res) => {
-    const { title, price, description, rarity, carType } = req.body;
+    const { title, price, description, rarity, carType, productType, partType } =
+      req.body;
     if (!title || !title.trim()) {
       return res.status(400).json({ error: "Укажите название товара" });
     }
@@ -231,6 +246,8 @@ app.post(
       description: (description || "").trim(),
       rarity: normalize(rarity, RARITIES),
       carType: normalize(carType, CAR_TYPES),
+      productType: normalize(productType, PRODUCT_TYPES),
+      partType: normalize(partType, PART_TYPES),
       hidden: false,
       image: img.url,
       imageId: img.id,
@@ -250,12 +267,17 @@ app.put(
     const product = db.products.find((p) => p.id === req.params.id);
     if (!product) return res.status(404).json({ error: "Товар не найден" });
 
-    const { title, price, description, rarity, carType } = req.body;
+    const { title, price, description, rarity, carType, productType, partType } =
+      req.body;
     if (title !== undefined) product.title = title.trim();
     if (price !== undefined) product.price = price.trim();
     if (description !== undefined) product.description = description.trim();
     if (rarity !== undefined) product.rarity = normalize(rarity, RARITIES);
     if (carType !== undefined) product.carType = normalize(carType, CAR_TYPES);
+    if (productType !== undefined)
+      product.productType = normalize(productType, PRODUCT_TYPES);
+    if (partType !== undefined)
+      product.partType = normalize(partType, PART_TYPES);
     if (req.file) {
       await deleteImage(product);
       const img = await storeImage(req.file);
