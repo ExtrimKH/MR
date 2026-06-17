@@ -1,7 +1,12 @@
 let allProducts = [];
 
 async function load() {
-  const products = await fetch("/api/products").then((r) => r.json());
+  const [products, info] = await Promise.all([
+    fetch("/api/products").then((r) => r.json()),
+    fetch("/api/info").then((r) => r.json()),
+  ]);
+
+  renderWeBuy(info.weBuy || "");
 
   allProducts = products;
   document
@@ -54,6 +59,23 @@ function card(p) {
         ${desc}
       </div>
     </article>`;
+}
+
+function renderWeBuy(text) {
+  const el = document.getElementById("we-buy");
+  if (!el) return;
+  const lines = text.split("\n").map((s) => s.trim()).filter(Boolean);
+  el.innerHTML = lines
+    .map((line) => `<li>${highlight(escapeHtml(line))}</li>`)
+    .join("");
+}
+
+// подсветка ключевых слов в строках "Что мы покупаем"
+function highlight(s) {
+  return s
+    .replace(/Epic/g, '<span class="rar rar-epic">Epic</span>')
+    .replace(/Legendary/g, '<span class="rar rar-leg">Legendary</span>')
+    .replace(/(\d[\d.,]*\s*\$?SOL)/g, "<b>$1</b>");
 }
 
 function badges(p) {

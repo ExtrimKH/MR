@@ -50,38 +50,7 @@
 
       <!-- Правая колонка: информационные блоки -->
       <aside class="sidebar">
-        <div class="info-card">
-          <h2>Как купить товар?</h2>
-          <p>Выберите интересующий вас товар и пришлите скриншот админу —
-            <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
-          <ul>
-            <li>Оплатите интересующий товар</li>
-            <li>Пришлите машину, совместимую с запчастью</li>
-            <li>Админ установит запчасть на вашу машину</li>
-            <li>Пришлёт машину обратно на ваш кошелёк</li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h2>Как продать товар?</h2>
-          <p>Чтобы продать деталь, напишите админу —
-            <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
-          <ul>
-            <li>Пришлите машину с продаваемой запчастью</li>
-            <li>Админ снимет запчасть и пришлёт машину обратно</li>
-            <li>Админ выплатит стоимость товара/машины</li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h2>Что мы покупаем?</h2>
-          <ul>
-            <li>Любая <span class="rar rar-epic">Epic</span> запчасть — <b>0.01 $SOL</b></li>
-            <li>Любая <span class="rar rar-leg">Legendary</span> запчасть — <b>0.025 $SOL</b></li>
-            <li>Любая машина <b>Rare+</b> редкости — <b>0.15 $SOL</b></li>
-          </ul>
-        </div>
-
+        <!-- Описание (вверху, всегда видно) -->
         <div class="info-card">
           <h2>Описание</h2>
           <p>Racers Shop — быстрый и удобный магазин товаров в игре Meta Racing.
@@ -93,6 +62,40 @@
             <li>Наш канал: <a href="https://t.me/metagoats" target="_blank" rel="noopener">t.me/metagoats</a></li>
             <li>Наш чат: <a href="https://t.me/goats_chat" target="_blank" rel="noopener">t.me/goats_chat</a></li>
           </ul>
+        </div>
+
+        <!-- Сворачиваемые блоки -->
+        <details class="info-card">
+          <summary>Как купить товар?</summary>
+          <div class="details-body">
+            <p>Выберите интересующий вас товар и пришлите скриншот админу —
+              <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
+            <ul>
+              <li>Оплатите интересующий товар</li>
+              <li>Пришлите машину, совместимую с запчастью</li>
+              <li>Админ установит запчасть на вашу машину</li>
+              <li>Пришлёт машину обратно на ваш кошелёк</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="info-card">
+          <summary>Как продать товар?</summary>
+          <div class="details-body">
+            <p>Чтобы продать деталь, напишите админу —
+              <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
+            <ul>
+              <li>Пришлите машину с продаваемой запчастью</li>
+              <li>Админ снимет запчасть и пришлёт машину обратно</li>
+              <li>Админ выплатит стоимость товара/машины</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Что мы покупаем (всегда открыт, редактируется в админке) -->
+        <div class="info-card">
+          <h2>Что мы покупаем?</h2>
+          <ul id="we-buy"></ul>
         </div>
       </aside>
     </div>

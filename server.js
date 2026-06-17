@@ -64,6 +64,8 @@ function defaultDB() {
       howItWorks:
         "Опишите здесь, как работает сервис: что вы делаете, сроки, условия.",
       whereToSend: "Укажите здесь адрес или контакт, куда отправлять машину.",
+      weBuy:
+        "Любая Epic запчасть — 0.01 $SOL\nЛюбая Legendary запчасть — 0.025 $SOL\nЛюбая машина Rare+ редкости — 0.15 $SOL",
     },
   };
 }
@@ -294,9 +296,10 @@ app.put(
   "/api/info",
   requireAuth,
   wrap(async (req, res) => {
-    const { howItWorks, whereToSend } = req.body;
+    const { howItWorks, whereToSend, weBuy } = req.body;
     if (howItWorks !== undefined) db.info.howItWorks = howItWorks;
     if (whereToSend !== undefined) db.info.whereToSend = whereToSend;
+    if (weBuy !== undefined) db.info.weBuy = weBuy;
     await saveDB(db);
     res.json(db.info);
   })
@@ -311,6 +314,10 @@ app.use((err, req, res, next) => {
 // ---- Старт ----
 async function init() {
   db = await loadDB();
+  // Дозаполняем новые поля для уже существующих баз
+  if (db.info && db.info.weBuy === undefined) {
+    db.info.weBuy = defaultDB().info.weBuy;
+  }
   await saveDB(db); // создаём запись/файл, если его не было
   app.listen(PORT, () => {
     console.log(`\n  Сайт запущен:  http://localhost:${PORT}`);

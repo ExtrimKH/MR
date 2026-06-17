@@ -40,8 +40,7 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
 // ---- Тексты ----
 async function loadInfo() {
   const info = await fetch("/api/info").then((r) => r.json());
-  document.getElementById("howItWorks").value = info.howItWorks || "";
-  document.getElementById("whereToSend").value = info.whereToSend || "";
+  document.getElementById("weBuy").value = info.weBuy || "";
 }
 
 document.getElementById("info-form").addEventListener("submit", async (e) => {
@@ -50,8 +49,7 @@ document.getElementById("info-form").addEventListener("submit", async (e) => {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      howItWorks: document.getElementById("howItWorks").value,
-      whereToSend: document.getElementById("whereToSend").value,
+      weBuy: document.getElementById("weBuy").value,
     }),
   });
   const saved = document.getElementById("info-saved");

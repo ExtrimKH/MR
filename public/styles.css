@@ -103,25 +103,51 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 14px 16px;
   box-shadow: var(--shadow);
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 .info-card h2 {
-  margin: 0 0 10px;
-  font-size: 1.05rem;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
   color: var(--accent);
 }
-.info-card p { margin: 0 0 10px; color: var(--text); }
+.info-card p { margin: 0 0 8px; color: var(--text); }
 .info-card p:last-child { margin-bottom: 0; }
 .info-card ul {
-  margin: 8px 0 0;
-  padding-left: 18px;
+  margin: 6px 0 0;
+  padding-left: 16px;
   color: var(--text);
 }
-.info-card li { margin: 4px 0; }
+.info-card li { margin: 3px 0; }
 .info-card a { color: var(--accent-hover); text-decoration: none; word-break: break-word; }
 .info-card a:hover { text-decoration: underline; }
 .info-card ul.links { list-style: none; padding-left: 0; }
+
+/* Сворачиваемые блоки (details/summary) */
+details.info-card { padding-top: 0; padding-bottom: 0; }
+details.info-card summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+details.info-card summary::-webkit-details-marker { display: none; }
+details.info-card summary::after {
+  content: "▸";
+  font-size: 0.9rem;
+  transition: transform 0.15s ease;
+}
+details.info-card[open] summary::after { transform: rotate(90deg); }
+.details-body { padding-bottom: 14px; }
+.details-body > :first-child { margin-top: 0; }
 
 /* мини-метки редкости в тексте */
 .rar { font-weight: 700; }
@@ -301,6 +327,7 @@ button.danger:hover { background: #dc2626; }
 .form-actions { display: flex; gap: 10px; }
 .toolbar { display: flex; justify-content: flex-end; margin-top: 16px; }
 
+.hint { color: var(--muted); font-size: 0.8rem; margin: -6px 0 12px; }
 .error { color: var(--danger); margin: 8px 0 0; }
 .saved { color: #16a34a; margin-left: 10px; font-size: 0.9rem; }
 
