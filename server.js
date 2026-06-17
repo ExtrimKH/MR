@@ -269,9 +269,25 @@ const wrap = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 // Лёгкая проверка живости (для аптайм-монитора, чтобы сайт не засыпал)
 app.get("/ping", (req, res) => res.type("text").send("ok"));
 
+// Только публичные поля товара (приватные — кошелёк/ник/комментарий — наружу не уходят)
+function publicProduct(p) {
+  return {
+    id: p.id,
+    title: p.title,
+    price: p.price,
+    description: p.description,
+    rarity: p.rarity,
+    carType: p.carType,
+    productType: p.productType,
+    partType: p.partType,
+    image: p.image,
+    createdAt: p.createdAt,
+  };
+}
+
 // ---- Публичные API ----
 app.get("/api/products", (req, res) => {
-  res.json(db.products.filter((p) => !p.hidden));
+  res.json(db.products.filter((p) => !p.hidden).map(publicProduct));
 });
 
 app.get("/api/admin/products", requireAuth, (req, res) => {
@@ -391,8 +407,18 @@ app.post(
   requireAuth,
   upload.single("image"),
   wrap(async (req, res) => {
-    const { title, price, description, rarity, carType, productType, partType } =
-      req.body;
+    const {
+      title,
+      price,
+      description,
+      rarity,
+      carType,
+      productType,
+      partType,
+      wallet,
+      nick,
+      comment,
+    } = req.body;
     if (!title || !title.trim()) {
       return res.status(400).json({ error: "Укажите название товара" });
     }
@@ -406,6 +432,10 @@ app.post(
       carType: normalize(carType, CAR_TYPES),
       productType: normalize(productType, PRODUCT_TYPES),
       partType: normalize(partType, PART_TYPES),
+      // приватные поля — только для админа, на витрину не уходят
+      wallet: (wallet || "").trim(),
+      nick: (nick || "").trim(),
+      comment: (comment || "").trim(),
       hidden: false,
       image: img.url,
       imageId: img.id,
@@ -425,8 +455,18 @@ app.put(
     const product = db.products.find((p) => p.id === req.params.id);
     if (!product) return res.status(404).json({ error: "Товар не найден" });
 
-    const { title, price, description, rarity, carType, productType, partType } =
-      req.body;
+    const {
+      title,
+      price,
+      description,
+      rarity,
+      carType,
+      productType,
+      partType,
+      wallet,
+      nick,
+      comment,
+    } = req.body;
     if (title !== undefined) product.title = title.trim();
     if (price !== undefined) product.price = price.trim();
     if (description !== undefined) product.description = description.trim();
@@ -436,6 +476,9 @@ app.put(
       product.productType = normalize(productType, PRODUCT_TYPES);
     if (partType !== undefined)
       product.partType = normalize(partType, PART_TYPES);
+    if (wallet !== undefined) product.wallet = wallet.trim();
+    if (nick !== undefined) product.nick = nick.trim();
+    if (comment !== undefined) product.comment = comment.trim();
     if (req.file) {
       await deleteImage(product);
       const img = await storeImage(req.file);

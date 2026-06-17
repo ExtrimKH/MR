@@ -307,6 +307,12 @@ select {
 }
 
 .admin-item.is-hidden { opacity: 0.55; }
+.private-line {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: #fbbf24;
+  word-break: break-all;
+}
 .hidden-tag {
   display: inline-block;
   margin-top: 4px;

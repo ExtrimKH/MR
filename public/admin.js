@@ -124,6 +124,7 @@ async function loadProducts() {
         ${badges(p)}
         ${p.price ? `<div class="price">${escapeHtml(p.price)}</div>` : ""}
         ${p.description ? `<p>${escapeHtml(p.description)}</p>` : ""}
+        ${privateLine(p)}
         ${p.hidden ? '<span class="hidden-tag">Скрыт</span>' : ""}
       </div>
       <div class="admin-item-actions">
@@ -146,6 +147,15 @@ async function loadProducts() {
   list.querySelectorAll("[data-toggle]").forEach((btn) =>
     btn.addEventListener("click", () => toggleHidden(btn.dataset.toggle))
   );
+}
+
+// Приватная строка (только в админке): кошелёк / ник / комментарий
+function privateLine(p) {
+  const bits = [];
+  if (p.wallet) bits.push(`💳 ${escapeHtml(p.wallet)}`);
+  if (p.nick) bits.push(`👤 ${escapeHtml(p.nick)}`);
+  if (p.comment) bits.push(`💬 ${escapeHtml(p.comment)}`);
+  return bits.length ? `<p class="private-line">${bits.join(" · ")}</p>` : "";
 }
 
 function badges(p) {
@@ -181,6 +191,9 @@ productForm.addEventListener("submit", async (e) => {
   fd.append("rarity", document.getElementById("rarity").value);
   fd.append("carType", document.getElementById("carType").value);
   fd.append("description", document.getElementById("description").value);
+  fd.append("wallet", document.getElementById("wallet").value);
+  fd.append("nick", document.getElementById("nick").value);
+  fd.append("comment", document.getElementById("comment").value);
   const file = document.getElementById("image").files[0];
   if (file) fd.append("image", file);
 
@@ -209,6 +222,9 @@ function startEdit(id, products) {
   document.getElementById("rarity").value = p.rarity || "None";
   document.getElementById("carType").value = p.carType || "None";
   document.getElementById("description").value = p.description || "";
+  document.getElementById("wallet").value = p.wallet || "";
+  document.getElementById("nick").value = p.nick || "";
+  document.getElementById("comment").value = p.comment || "";
   document.getElementById("image").value = "";
   document.getElementById("product-form-title").textContent = "Изменить товар";
   document.getElementById("save-product-btn").textContent = "Сохранить";
