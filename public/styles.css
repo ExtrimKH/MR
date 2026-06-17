@@ -26,9 +26,9 @@ body {
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 28px;
 }
 
 /* Header / footer */
@@ -84,7 +84,8 @@ body {
 /* Двухколоночный макет: товары слева, инфо-блоки справа */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 1100px) 360px;
+  justify-content: space-between;
   gap: 24px;
   align-items: start;
   margin: 24px 0;
