@@ -59,13 +59,6 @@ function render() {
 
   empty.hidden = true;
   grid.innerHTML = filtered.map(card).join("");
-
-  grid.querySelectorAll(".buy-btn").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      const p = allProducts.find((x) => x.id === btn.dataset.id);
-      if (p) buyProduct(p);
-    })
-  );
 }
 
 function card(p, i = 0) {
@@ -89,60 +82,8 @@ function card(p, i = 0) {
         ${cardMeta(p)}
         ${price}
         ${desc}
-        <button class="buy-btn" data-id="${p.id}">Купить</button>
       </div>
     </article>`;
-}
-
-const ADMIN_TG = "https://t.me/givemepermissions";
-
-async function buyProduct(p) {
-  const text = buildOrderText(p);
-  await copyText(text);
-  toast("Текст заказа скопирован — вставьте его в чат (Ctrl+V) и отправьте");
-  window.open(ADMIN_TG, "_blank");
-}
-
-function buildOrderText(p) {
-  const types = [p.rarity, p.partType, p.carType, p.productType].filter(
-    (t) => t && t !== "None"
-  );
-  let msg = `Здравствуйте! Хочу купить: ${p.title}`;
-  if (types.length) msg += ` (${types.join(", ")})`;
-  if (p.price) msg += `, цена ${formatPrice(p.price)}`;
-  if (p.image) msg += `\nФото: ${new URL(p.image, location.origin).href}`;
-  return msg;
-}
-
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand("copy");
-    } catch (_) {}
-    ta.remove();
-  }
-}
-
-function toast(msg) {
-  let t = document.getElementById("toast");
-  if (!t) {
-    t = document.createElement("div");
-    t.id = "toast";
-    t.className = "toast";
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove("show"), 3000);
 }
 
 function renderWeBuy(text) {
