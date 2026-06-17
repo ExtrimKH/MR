@@ -49,7 +49,9 @@ function card(p) {
   const img = p.image
     ? `<img src="${p.image}" alt="" loading="lazy" />`
     : `<div class="no-image">нет фото</div>`;
-  const price = p.price ? `<div class="price">${escapeHtml(p.price)}</div>` : "";
+  const price = p.price
+    ? `<div class="price">${escapeHtml(formatPrice(p.price))}</div>`
+    : "";
   const desc = p.description
     ? `<p class="desc">${escapeHtml(p.description)}</p>`
     : "";
@@ -80,6 +82,12 @@ function highlight(s) {
     .replace(/Epic/g, '<span class="rar rar-epic">Epic</span>')
     .replace(/Legendary/g, '<span class="rar rar-leg">Legendary</span>')
     .replace(/(\d[\d.,]*\s*\$?SOL)/g, "<b>$1</b>");
+}
+
+// К числу автоматически добавляем $SOL (если его ещё нет)
+function formatPrice(v) {
+  const s = String(v).trim();
+  return /sol/i.test(s) ? s : s + " $SOL";
 }
 
 // Строка под названием: редкость, деталь, тип машины, тип товара
