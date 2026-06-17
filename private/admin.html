@@ -41,7 +41,34 @@
 
       <div class="tabs">
         <button class="tab-btn active" data-tab="products">Товары</button>
+        <button class="tab-btn" data-tab="blocks">Блоки</button>
         <button class="tab-btn" data-tab="others">Чужое</button>
+      </div>
+
+      <div id="tab-blocks" hidden>
+        <div class="panel">
+          <h2>Блоки на сайте (правая колонка)</h2>
+          <p class="hint">Пустая строка — новый абзац. Строка, начинающаяся с «•», — пункт списка. Ссылки и @ник станут кликабельными. Слова «Epic»/«Legendary» подсветятся.</p>
+          <form id="blocks-form">
+            <label>Про магазин
+              <textarea id="f-about" rows="6"></textarea>
+            </label>
+            <label>Как купить товар?
+              <textarea id="f-buy" rows="6"></textarea>
+            </label>
+            <label>Как продать товар?
+              <textarea id="f-sell" rows="5"></textarea>
+            </label>
+            <label>Что мы покупаем? (подблок внутри «Как продать»)
+              <textarea id="f-weBuy" rows="4"></textarea>
+            </label>
+            <label>Как выставить свой товар?
+              <textarea id="f-consign" rows="8"></textarea>
+            </label>
+            <button type="submit">Сохранить блоки</button>
+            <span class="saved" id="blocks-saved" hidden>Сохранено ✓</span>
+          </form>
+        </div>
       </div>
 
       <div id="tab-others" hidden>
@@ -64,18 +91,6 @@
           <input type="file" id="import-file" accept="application/json,.json" hidden />
         </div>
         <span class="saved" id="backup-msg" hidden></span>
-      </div>
-
-      <div class="panel">
-        <h2>Блок «Что мы покупаем»</h2>
-        <form id="info-form">
-          <label>Каждая строка — отдельный пункт списка
-            <textarea id="weBuy" rows="5" placeholder="Любая Epic запчасть — 0.01 $SOL"></textarea>
-          </label>
-          <p class="hint">Слова «Epic», «Legendary» и цены в $SOL подсветятся на сайте автоматически.</p>
-          <button type="submit">Сохранить</button>
-          <span class="saved" id="info-saved" hidden>Сохранено ✓</span>
-        </form>
       </div>
 
       <div class="panel">

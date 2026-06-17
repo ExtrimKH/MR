@@ -10,7 +10,6 @@ async function init() {
 function showAdmin() {
   loginView.hidden = true;
   adminView.hidden = false;
-  loadInfo();
   loadProducts();
 }
 
@@ -70,7 +69,7 @@ document.getElementById("import-file").addEventListener("change", async (e) => {
     if (!res.ok) throw new Error(out.error || "Ошибка");
     msg.textContent = `Восстановлено товаров: ${out.count} ✓`;
     msg.hidden = false;
-    loadInfo();
+    loadBlocks();
     loadProducts();
   } catch (err) {
     msg.textContent = "Не удалось восстановить: " + err.message;
@@ -79,22 +78,28 @@ document.getElementById("import-file").addEventListener("change", async (e) => {
   e.target.value = "";
 });
 
-// ---- Тексты ----
-async function loadInfo() {
+// ---- Блоки (тексты правой колонки) ----
+const BLOCK_FIELDS = ["about", "buy", "sell", "weBuy", "consign"];
+
+async function loadBlocks() {
   const info = await fetch("/api/info").then((r) => r.json());
-  document.getElementById("weBuy").value = info.weBuy || "";
+  BLOCK_FIELDS.forEach((k) => {
+    document.getElementById("f-" + k).value = info[k] || "";
+  });
 }
 
-document.getElementById("info-form").addEventListener("submit", async (e) => {
+document.getElementById("blocks-form").addEventListener("submit", async (e) => {
   e.preventDefault();
+  const body = {};
+  BLOCK_FIELDS.forEach((k) => {
+    body[k] = document.getElementById("f-" + k).value;
+  });
   await fetch("/api/info", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      weBuy: document.getElementById("weBuy").value,
-    }),
+    body: JSON.stringify(body),
   });
-  const saved = document.getElementById("info-saved");
+  const saved = document.getElementById("blocks-saved");
   saved.hidden = false;
   setTimeout(() => (saved.hidden = true), 2000);
 });
@@ -246,8 +251,10 @@ document.querySelectorAll(".tab-btn").forEach((btn) =>
     btn.classList.add("active");
     const tab = btn.dataset.tab;
     document.getElementById("tab-products").hidden = tab !== "products";
+    document.getElementById("tab-blocks").hidden = tab !== "blocks";
     document.getElementById("tab-others").hidden = tab !== "others";
     if (tab === "others") loadCons();
+    if (tab === "blocks") loadBlocks();
   })
 );
 

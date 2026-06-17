@@ -67,6 +67,14 @@ function defaultDB() {
       whereToSend: "Укажите здесь адрес или контакт, куда отправлять машину.",
       weBuy:
         "Любая Epic запчасть — 0.01 $SOL\nЛюбая Legendary запчасть — 0.025 $SOL\nЛюбая машина Rare+ редкости — 0.15 $SOL",
+      about:
+        "Racers Shop — быстрый и удобный магазин товаров в игре Meta Racing. Создан, чтобы игроки могли комфортно покупать детали и другие активы в проекте Meta Racing по приятным ценам без риска обмана.\n\nМагазин основан админом сообщества METAGOATS. Мы совместно играем в различные Web3-игры.\n\nНаш канал: https://t.me/metagoats\nНаш чат: https://t.me/goats_chat",
+      buy:
+        "Выберите интересующий вас товар и пришлите скриншот админу — @givemepermissions.\n\n• Оплатите интересующий товар\n• Пришлите машину, совместимую с запчастью\n• Админ установит запчасть на вашу машину\n• Пришлёт машину обратно на ваш кошелёк",
+      sell:
+        "Чтобы продать деталь, напишите админу — @givemepermissions.\n\n• Пришлите машину с продаваемой запчастью\n• Админ снимет запчасть и пришлёт машину обратно\n• Админ выплатит стоимость товара/машины",
+      consign:
+        "Чтобы выставить свой товар, напишите админу — @givemepermissions.\n\n• Админ проведёт оценку и определит цену товара\n• Оплатите 15% от стоимости вперёд\n• Отправьте ваш товар админу\n• После продажи товара админ отправит 85% от стоимости\n\nКомиссия магазина составляет 30%, которая делится на:\n\n• Страховая комиссия — 15%\n• Комиссия после продажи — 15%\n\n❗️ Страховая комиссия (15%) не возвращается, даже если товар никогда не продастся, магазин закроется или вы захотите вернуть товар.",
     },
   };
 }
@@ -468,10 +476,18 @@ app.put(
   "/api/info",
   requireAuth,
   wrap(async (req, res) => {
-    const { howItWorks, whereToSend, weBuy } = req.body;
-    if (howItWorks !== undefined) db.info.howItWorks = howItWorks;
-    if (whereToSend !== undefined) db.info.whereToSend = whereToSend;
-    if (weBuy !== undefined) db.info.weBuy = weBuy;
+    const INFO_KEYS = [
+      "howItWorks",
+      "whereToSend",
+      "weBuy",
+      "about",
+      "buy",
+      "sell",
+      "consign",
+    ];
+    for (const k of INFO_KEYS) {
+      if (req.body[k] !== undefined) db.info[k] = req.body[k];
+    }
     await saveDB(db);
     res.json(db.info);
   })
@@ -486,9 +502,10 @@ app.use((err, req, res, next) => {
 // ---- Старт ----
 async function init() {
   db = await loadDB();
-  // Дозаполняем новые поля для уже существующих баз
-  if (db.info && db.info.weBuy === undefined) {
-    db.info.weBuy = defaultDB().info.weBuy;
+  // Дозаполняем новые текстовые блоки для уже существующих баз
+  const di = defaultDB().info;
+  for (const k of ["weBuy", "about", "buy", "sell", "consign"]) {
+    if (db.info[k] === undefined) db.info[k] = di[k];
   }
   if (!Array.isArray(db.consignments)) db.consignments = [];
   // Разовая миграция: все текущие товары — «Деталь» (выполняется один раз)

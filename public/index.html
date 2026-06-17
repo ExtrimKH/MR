@@ -79,49 +79,20 @@
 
       <!-- Правая колонка: информационные блоки -->
       <aside class="sidebar">
-        <!-- Про магазин (сворачиваемый) -->
         <details class="info-card">
           <summary>Про магазин</summary>
-          <div class="details-body">
-            <p>Racers Shop — быстрый и удобный магазин товаров в игре Meta Racing.
-              Создан, чтобы игроки могли комфортно покупать детали и другие активы
-              в проекте Meta Racing по приятным ценам без риска обмана.</p>
-            <p>Магазин основан админом сообщества METAGOATS. Мы совместно играем
-              в различные Web3-игры.</p>
-            <ul class="links">
-              <li>Наш канал: <a href="https://t.me/metagoats" target="_blank" rel="noopener">t.me/metagoats</a></li>
-              <li>Наш чат: <a href="https://t.me/goats_chat" target="_blank" rel="noopener">t.me/goats_chat</a></li>
-            </ul>
-          </div>
+          <div class="details-body" id="b-about"></div>
         </details>
 
-        <!-- Сворачиваемые блоки -->
         <details class="info-card">
           <summary>Как купить товар?</summary>
-          <div class="details-body">
-            <p>Выберите интересующий вас товар и пришлите скриншот админу —
-              <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
-            <ul>
-              <li>Оплатите интересующий товар</li>
-              <li>Пришлите машину, совместимую с запчастью</li>
-              <li>Админ установит запчасть на вашу машину</li>
-              <li>Пришлёт машину обратно на ваш кошелёк</li>
-            </ul>
-          </div>
+          <div class="details-body" id="b-buy"></div>
         </details>
 
         <details class="info-card">
           <summary>Как продать товар?</summary>
           <div class="details-body">
-            <p>Чтобы продать деталь, напишите админу —
-              <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
-            <ul>
-              <li>Пришлите машину с продаваемой запчастью</li>
-              <li>Админ снимет запчасть и пришлёт машину обратно</li>
-              <li>Админ выплатит стоимость товара/машины</li>
-            </ul>
-
-            <!-- Подблок: редактируется в админке -->
+            <div id="b-sell"></div>
             <div class="subblock">
               <h3>Что мы покупаем?</h3>
               <ul id="we-buy"></ul>
@@ -131,23 +102,7 @@
 
         <details class="info-card">
           <summary>Как выставить свой товар?</summary>
-          <div class="details-body">
-            <p>Чтобы выставить свой товар, напишите админу —
-              <a href="https://t.me/givemepermissions" target="_blank" rel="noopener">@givemepermissions</a>.</p>
-            <ul>
-              <li>Админ проведёт оценку и определит цену товара</li>
-              <li>Оплатите 15% от стоимости вперёд</li>
-              <li>Отправьте ваш товар админу</li>
-              <li>После продажи товара админ отправит 85% от стоимости</li>
-            </ul>
-            <p>Комиссия магазина составляет 30%, которая делится на:</p>
-            <ul>
-              <li>Страховая комиссия — 15%</li>
-              <li>Комиссия после продажи — 15%</li>
-            </ul>
-            <p>❗️ Страховая комиссия (15%) не возвращается, даже если товар никогда
-              не продастся, магазин закроется или вы захотите вернуть товар.</p>
-          </div>
+          <div class="details-body" id="b-consign"></div>
         </details>
       </aside>
     </div>

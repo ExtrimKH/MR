@@ -7,6 +7,10 @@ async function load() {
   ]);
 
   renderWeBuy(info.weBuy || "");
+  renderBlock("b-about", info.about);
+  renderBlock("b-buy", info.buy);
+  renderBlock("b-sell", info.sell);
+  renderBlock("b-consign", info.consign);
 
   allProducts = products;
   ["filter-rarity", "filter-type", "filter-product", "filter-part", "sort"].forEach(
@@ -84,6 +88,58 @@ function card(p, i = 0) {
         ${desc}
       </div>
     </article>`;
+}
+
+// Текст блока -> HTML: абзацы, списки (строки с «•»/«-»), ссылки, @ник
+function renderBlock(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const lines = String(text || "").split("\n");
+  let html = "";
+  let inList = false;
+  const closeList = () => {
+    if (inList) {
+      html += "</ul>";
+      inList = false;
+    }
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      closeList();
+      continue;
+    }
+    if (/^[•\-]\s*/.test(line)) {
+      if (!inList) {
+        html += "<ul>";
+        inList = true;
+      }
+      html += `<li>${fmtInline(line.replace(/^[•\-]\s*/, ""))}</li>`;
+    } else {
+      closeList();
+      html += `<p>${fmtInline(line)}</p>`;
+    }
+  }
+  closeList();
+  el.innerHTML = html;
+}
+
+function fmtInline(s) {
+  s = escapeHtml(s);
+  s = s.replace(
+    /(https?:\/\/[^\s]+)/g,
+    (m) =>
+      `<a href="${m}" target="_blank" rel="noopener">${m.replace(/^https?:\/\//, "")}</a>`
+  );
+  s = s.replace(
+    /(^|[\s(])@([a-zA-Z0-9_]{3,})/g,
+    (m, pre, u) =>
+      `${pre}<a href="https://t.me/${u}" target="_blank" rel="noopener">@${u}</a>`
+  );
+  s = s
+    .replace(/\bEpic\b/g, '<span class="rar rar-epic">Epic</span>')
+    .replace(/\bLegendary\b/g, '<span class="rar rar-leg">Legendary</span>');
+  return s;
 }
 
 function renderWeBuy(text) {
