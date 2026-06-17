@@ -88,19 +88,18 @@
           <input type="hidden" id="edit-id" />
           <div class="pf-grid">
             <div class="pf-fields">
-              <label class="pf-full">Название
+              <label>Название
                 <input type="text" id="title" required />
+              </label>
+              <label>Редкость
+                <select id="rarity">
+                  <option value="None">None</option>
+                  <option value="Epic">Epic</option>
+                  <option value="Legendary">Legendary</option>
+                </select>
               </label>
               <label>Цена, $SOL
                 <input type="text" id="price" placeholder="например, 0.3" />
-              </label>
-              <label>Тип товара
-                <select id="productType">
-                  <option value="None">None</option>
-                  <option value="Машина">Машина</option>
-                  <option value="Деталь">Деталь</option>
-                  <option value="Карточка">Карточка</option>
-                </select>
               </label>
               <label>Тип детали
                 <select id="partType">
@@ -117,11 +116,12 @@
                   <option value="Wing">Wing</option>
                 </select>
               </label>
-              <label>Редкость
-                <select id="rarity">
+              <label>Тип товара
+                <select id="productType">
                   <option value="None">None</option>
-                  <option value="Epic">Epic</option>
-                  <option value="Legendary">Legendary</option>
+                  <option value="Машина">Машина</option>
+                  <option value="Деталь">Деталь</option>
+                  <option value="Карточка">Карточка</option>
                 </select>
               </label>
               <label>Тип машины
@@ -159,13 +159,13 @@
                 <img id="dz-preview" alt="" hidden />
               </label>
               <button type="button" id="dz-clear" class="secondary" hidden>Убрать фото</button>
+              <div class="form-actions pf-buttons">
+                <button type="submit" id="save-product-btn">Добавить</button>
+                <button type="button" id="cancel-edit-btn" class="secondary" hidden>Отмена</button>
+              </div>
             </div>
           </div>
 
-          <div class="form-actions">
-            <button type="submit" id="save-product-btn">Добавить</button>
-            <button type="button" id="cancel-edit-btn" class="secondary" hidden>Отмена</button>
-          </div>
           <p class="error" id="product-error" hidden></p>
         </form>
       </div>

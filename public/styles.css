@@ -395,6 +395,8 @@ button.danger:hover { background: #dc2626; }
 .pf-fields .pf-full { grid-column: 1 / -1; }
 
 .pf-photo { display: flex; flex-direction: column; gap: 8px; }
+.pf-photo button { width: 100%; }
+.pf-buttons { flex-direction: column; gap: 8px; margin-top: 4px; }
 .dropzone {
   display: flex;
   align-items: center;
