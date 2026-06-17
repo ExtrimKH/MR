@@ -14,21 +14,42 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123"; // ПОМЕНЯ
 const SESSION_SECRET =
   process.env.SESSION_SECRET || crypto.randomBytes(16).toString("hex");
 
+// Убирает частые ошибки вставки: пробелы, кавычки и случайный префикс "ИМЯ=".
+function cleanEnv(name) {
+  let v = (process.env[name] || "").trim();
+  if (v.startsWith(name + "=")) v = v.slice(name.length + 1).trim();
+  v = v.replace(/^["']|["']$/g, "").trim();
+  return v;
+}
+
 // Облачные хранилища включаются, только если заданы переменные окружения.
 // Если их нет — работаем локально (фото на диске, данные в data/db.json).
-const USE_CLOUDINARY = !!process.env.CLOUDINARY_URL;
-const USE_REDIS =
-  !!process.env.UPSTASH_REDIS_REST_URL &&
-  !!process.env.UPSTASH_REDIS_REST_TOKEN;
+const CLOUDINARY_URL = cleanEnv("CLOUDINARY_URL");
+const REDIS_URL = cleanEnv("UPSTASH_REDIS_REST_URL");
+const REDIS_TOKEN = cleanEnv("UPSTASH_REDIS_REST_TOKEN");
 const DATA_KEY = process.env.DATA_KEY || "vizov:db";
 
 const DATA_DIR = path.join(__dirname, "data");
 const UPLOADS_DIR = path.join(__dirname, "uploads");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 
+let USE_CLOUDINARY = CLOUDINARY_URL.startsWith("cloudinary://");
+let USE_REDIS = !!REDIS_URL && !!REDIS_TOKEN;
+
 let cloudinary = null;
 if (USE_CLOUDINARY) {
-  cloudinary = require("cloudinary").v2; // сам читает CLOUDINARY_URL
+  try {
+    process.env.CLOUDINARY_URL = CLOUDINARY_URL; // нормализованное значение для SDK
+    cloudinary = require("cloudinary").v2;
+  } catch (e) {
+    console.error("Cloudinary отключён (ошибка конфигурации):", e.message);
+    cloudinary = null;
+    USE_CLOUDINARY = false;
+  }
+} else if (CLOUDINARY_URL) {
+  console.error(
+    "CLOUDINARY_URL задан, но не начинается с 'cloudinary://' — фото будут на диске. Проверь значение."
+  );
 }
 
 for (const dir of [DATA_DIR, UPLOADS_DIR]) {
@@ -48,10 +69,10 @@ function defaultDB() {
 }
 
 async function redisCommand(cmd) {
-  const res = await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+  const res = await fetch(REDIS_URL, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + process.env.UPSTASH_REDIS_REST_TOKEN,
+      Authorization: "Bearer " + REDIS_TOKEN,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(cmd),
