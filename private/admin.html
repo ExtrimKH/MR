@@ -83,17 +83,6 @@
       <div id="tab-products">
 
       <div class="panel">
-        <h2>Бэкап данных</h2>
-        <p class="hint">Копия сохраняется автоматически каждые 12 часов. Здесь можно скачать копию себе или восстановить из файла.</p>
-        <div class="form-actions">
-          <button type="button" id="export-btn">Скачать бэкап</button>
-          <button type="button" id="import-btn" class="secondary">Восстановить из файла</button>
-          <input type="file" id="import-file" accept="application/json,.json" hidden />
-        </div>
-        <span class="saved" id="backup-msg" hidden></span>
-      </div>
-
-      <div class="panel">
         <h2 id="product-form-title">Добавить товар</h2>
         <form id="product-form">
           <input type="hidden" id="edit-id" />
@@ -159,6 +148,17 @@
       <div class="panel">
         <h2>Товары</h2>
         <div id="admin-products" class="admin-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Бэкап данных</h2>
+        <p class="hint">Копия сохраняется автоматически каждые 12 часов. Здесь можно скачать копию себе или восстановить из файла.</p>
+        <div class="form-actions">
+          <button type="button" id="export-btn">Скачать бэкап</button>
+          <button type="button" id="import-btn" class="secondary">Восстановить из файла</button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden />
+        </div>
+        <span class="saved" id="backup-msg" hidden></span>
       </div>
 
       </div><!-- /tab-products -->
