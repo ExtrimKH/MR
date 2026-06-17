@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">
+        <h1 class="logo">Store for Racers</h1>
+        <span class="tagline">by METAGOATS</span>
+      </div>
+      <a class="admin-link" href="/admin">Вход для администратора</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="info-block" id="info-block">
+      <div class="info-card">
+        <h2>Как это работает</h2>
+        <p id="how-it-works"></p>
+      </div>
+      <div class="info-card">
+        <h2>Куда отправлять машину</h2>
+        <p id="where-to-send"></p>
+      </div>
+    </section>
+
+    <h2 class="section-title">Товары</h2>
+
+    <div class="filters">
+      <label>Редкость
+        <select id="filter-rarity">
+          <option value="">Все</option>
+          <option value="None">None</option>
+          <option value="Epic">Epic</option>
+          <option value="Legendary">Legendary</option>
+        </select>
+      </label>
+      <label>Тип машины
+        <select id="filter-type">
+          <option value="">Все</option>
+          <option value="None">None</option>
+          <option value="Road">Road</option>
+          <option value="Sport">Sport</option>
+          <option value="Muscle">Muscle</option>
+          <option value="Vintage">Vintage</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="products" class="grid"></div>
+    <p id="empty" class="empty" hidden>Пока нет товаров.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">Витрина товаров</div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

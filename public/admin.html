@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админка</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">Админка</h1>
+      <a class="admin-link" href="/">На сайт</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Форма входа -->
+    <section id="login-view" hidden>
+      <div class="panel narrow">
+        <h2>Вход</h2>
+        <form id="login-form">
+          <label>Пароль
+            <input type="password" id="password" required autocomplete="current-password" />
+          </label>
+          <button type="submit">Войти</button>
+          <p class="error" id="login-error" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Панель администратора -->
+    <section id="admin-view" hidden>
+      <div class="toolbar">
+        <button id="logout-btn" class="secondary">Выйти</button>
+      </div>
+
+      <div class="panel">
+        <h2>Тексты на сайте</h2>
+        <form id="info-form">
+          <label>Как это работает
+            <textarea id="howItWorks" rows="3"></textarea>
+          </label>
+          <label>Куда отправлять машину
+            <textarea id="whereToSend" rows="3"></textarea>
+          </label>
+          <button type="submit">Сохранить тексты</button>
+          <span class="saved" id="info-saved" hidden>Сохранено ✓</span>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2 id="product-form-title">Добавить товар</h2>
+        <form id="product-form">
+          <input type="hidden" id="edit-id" />
+          <label>Название
+            <input type="text" id="title" required />
+          </label>
+          <label>Цена
+            <input type="text" id="price" placeholder="например, 5000 ₽" />
+          </label>
+          <label>Редкость
+            <select id="rarity">
+              <option value="None">None</option>
+              <option value="Epic">Epic</option>
+              <option value="Legendary">Legendary</option>
+            </select>
+          </label>
+          <label>Тип машины
+            <select id="carType">
+              <option value="None">None</option>
+              <option value="Road">Road</option>
+              <option value="Sport">Sport</option>
+              <option value="Muscle">Muscle</option>
+              <option value="Vintage">Vintage</option>
+            </select>
+          </label>
+          <label>Описание
+            <textarea id="description" rows="3"></textarea>
+          </label>
+          <label>Фото
+            <input type="file" id="image" accept="image/*" />
+          </label>
+          <div class="form-actions">
+            <button type="submit" id="save-product-btn">Добавить</button>
+            <button type="button" id="cancel-edit-btn" class="secondary" hidden>Отмена</button>
+          </div>
+          <p class="error" id="product-error" hidden></p>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Товары</h2>
+        <div id="admin-products" class="admin-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/admin.js"></script>
+</body>
+</html>
