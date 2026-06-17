@@ -193,6 +193,17 @@ details.info-card[open] summary::after { transform: rotate(90deg); }
 }
 .product-body { padding: 11px 13px; }
 .product-body h3 { margin: 0 0 5px; font-size: 0.95rem; line-height: 1.25; }
+.prod-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin: 0 0 6px;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.prod-meta .rar { color: inherit; }
+.prod-meta .rar.rar-leg { color: #fbbf24; }
+.prod-meta .rar.rar-epic { color: #a78bfa; }
 .price { color: var(--accent); font-weight: 700; font-size: 0.98rem; }
 .desc { margin: 6px 0 0; color: var(--muted); font-size: 0.82rem; white-space: pre-wrap; }
 

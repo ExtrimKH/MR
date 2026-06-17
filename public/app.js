@@ -55,9 +55,10 @@ function card(p) {
     : "";
   return `
     <article class="product">
-      <div class="product-img">${img}${badges(p)}</div>
+      <div class="product-img">${img}</div>
       <div class="product-body">
         <h3>${escapeHtml(p.title)}</h3>
+        ${cardMeta(p)}
         ${price}
         ${desc}
       </div>
@@ -81,17 +82,20 @@ function highlight(s) {
     .replace(/(\d[\d.,]*\s*\$?SOL)/g, "<b>$1</b>");
 }
 
-function badges(p) {
-  const items = [];
-  if (p.rarity && p.rarity !== "None")
-    items.push(`<span class="badge rarity-${p.rarity}">${p.rarity}</span>`);
-  if (p.productType && p.productType !== "None")
-    items.push(`<span class="badge kind">${escapeHtml(p.productType)}</span>`);
+// Строка под названием: редкость, деталь, тип машины, тип товара
+function cardMeta(p) {
+  const parts = [];
+  if (p.rarity && p.rarity !== "None") {
+    const cls = p.rarity === "Legendary" ? "rar-leg" : "rar-epic";
+    parts.push(`<span class="rar ${cls}">${p.rarity}</span>`);
+  }
   if (p.partType && p.partType !== "None")
-    items.push(`<span class="badge type">${escapeHtml(p.partType)}</span>`);
+    parts.push(`<span>${escapeHtml(p.partType)}</span>`);
   if (p.carType && p.carType !== "None")
-    items.push(`<span class="badge type">${escapeHtml(p.carType)}</span>`);
-  return items.length ? `<div class="badges">${items.join("")}</div>` : "";
+    parts.push(`<span>${escapeHtml(p.carType)}</span>`);
+  if (p.productType && p.productType !== "None")
+    parts.push(`<span>${escapeHtml(p.productType)}</span>`);
+  return parts.length ? `<div class="prod-meta">${parts.join("")}</div>` : "";
 }
 
 function escapeHtml(s) {
