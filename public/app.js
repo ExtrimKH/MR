@@ -111,17 +111,20 @@ function formatPrice(v) {
 
 // Строка под названием: редкость, деталь, тип машины, тип товара
 function cardMeta(p) {
+  const title = (p.title || "").trim().toLowerCase();
   const parts = [];
   if (p.rarity && p.rarity !== "None") {
     const cls = p.rarity === "Legendary" ? "rar-leg" : "rar-epic";
     parts.push(`<span class="rar ${cls}">${p.rarity}</span>`);
   }
-  if (p.partType && p.partType !== "None")
-    parts.push(`<span>${escapeHtml(p.partType)}</span>`);
-  if (p.carType && p.carType !== "None")
-    parts.push(`<span>${escapeHtml(p.carType)}</span>`);
-  if (p.productType && p.productType !== "None")
-    parts.push(`<span>${escapeHtml(p.productType)}</span>`);
+  // не показываем значение, если оно совпадает с названием товара
+  const plain = (v) => {
+    if (v && v !== "None" && v.toLowerCase() !== title)
+      parts.push(`<span>${escapeHtml(v)}</span>`);
+  };
+  plain(p.partType);
+  plain(p.carType);
+  plain(p.productType);
   return parts.length ? `<div class="prod-meta">${parts.join("")}</div>` : "";
 }
 
