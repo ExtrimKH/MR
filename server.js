@@ -187,8 +187,10 @@ app.use(
 app.use("/uploads", express.static(UPLOADS_DIR));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "admin.html"));
+// Админка по скрытому адресу /haha, с запретом индексации поисковиками
+app.get("/haha", (req, res) => {
+  res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  res.sendFile(path.join(__dirname, "private", "admin.html"));
 });
 
 function requireAuth(req, res, next) {
@@ -443,7 +445,7 @@ async function init() {
 
   app.listen(PORT, () => {
     console.log(`\n  Сайт запущен:  http://localhost:${PORT}`);
-    console.log(`  Админка:       http://localhost:${PORT}/admin`);
+    console.log(`  Админка:       http://localhost:${PORT}/haha`);
     console.log(`  Пароль админа: ${ADMIN_PASSWORD}`);
     console.log(
       `  Хранилище: фото — ${USE_CLOUDINARY ? "Cloudinary" : "диск"}, данные — ${

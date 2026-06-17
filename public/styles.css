@@ -412,6 +412,23 @@ button.danger:hover { background: #dc2626; }
 .toolbar { display: flex; justify-content: flex-end; margin-top: 16px; }
 
 .hint { color: var(--muted); font-size: 0.8rem; margin: -6px 0 12px; }
+
+/* Поле пароля с кнопкой показа */
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 42px; }
+.pw-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.pw-toggle:hover { background: transparent; opacity: 1; }
 .error { color: var(--danger); margin: 8px 0 0; }
 .saved { color: #16a34a; margin-left: 10px; font-size: 0.9rem; }
 

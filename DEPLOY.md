@@ -48,7 +48,7 @@
 
    (`SESSION_SECRET` Render создаст сам.)
 5. Create Web Service → подожди 1–2 минуты, пока соберётся.
-6. Готово: сайт по адресу `https://ИМЯ.onrender.com`, админка `/admin`.
+6. Готово: сайт по адресу `https://ИМЯ.onrender.com`, админка `/haha`.
 
 ---
 

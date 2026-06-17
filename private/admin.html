@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <title>Админка</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -21,7 +22,10 @@
         <h2>Вход</h2>
         <form id="login-form">
           <label>Пароль
-            <input type="password" id="password" required autocomplete="current-password" />
+            <div class="pw-wrap">
+              <input type="password" id="password" required autocomplete="current-password" />
+              <button type="button" id="toggle-pw" class="pw-toggle" aria-label="Показать пароль">👁</button>
+            </div>
           </label>
           <button type="submit">Войти</button>
           <p class="error" id="login-error" hidden></p>

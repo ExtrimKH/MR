@@ -15,6 +15,11 @@ function showAdmin() {
 }
 
 // ---- Вход / выход ----
+document.getElementById("toggle-pw").addEventListener("click", () => {
+  const input = document.getElementById("password");
+  input.type = input.type === "password" ? "text" : "password";
+});
+
 document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const err = document.getElementById("login-error");
