@@ -377,6 +377,14 @@ async function init() {
   if (db.info && db.info.weBuy === undefined) {
     db.info.weBuy = defaultDB().info.weBuy;
   }
+  // Разовая миграция: все текущие товары — «Деталь» (выполняется один раз)
+  if (!db.migrations) db.migrations = {};
+  if (!db.migrations.allDetail) {
+    db.products.forEach((p) => {
+      p.productType = "Деталь";
+    });
+    db.migrations.allDetail = true;
+  }
   await saveDB(db); // создаём запись/файл, если его не было
   app.listen(PORT, () => {
     console.log(`\n  Сайт запущен:  http://localhost:${PORT}`);
