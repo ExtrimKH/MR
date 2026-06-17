@@ -149,6 +149,19 @@ details.info-card[open] summary::after { transform: rotate(90deg); }
 .details-body { padding-bottom: 14px; }
 .details-body > :first-child { margin-top: 0; }
 
+/* Подблок внутри сворачиваемого блока */
+.subblock {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.subblock h3 {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+  color: var(--accent);
+}
+.subblock ul { margin: 0; padding-left: 16px; }
+
 /* мини-метки редкости в тексте */
 .rar { font-weight: 700; }
 .rar-epic { color: #a78bfa; }
