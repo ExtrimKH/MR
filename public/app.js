@@ -55,8 +55,10 @@ function card(p) {
   const desc = p.description
     ? `<p class="desc">${escapeHtml(p.description)}</p>`
     : "";
+  const rcls =
+    p.rarity === "Legendary" ? "r-leg" : p.rarity === "Epic" ? "r-epic" : "";
   return `
-    <article class="product">
+    <article class="product ${rcls}">
       <div class="product-img">${img}</div>
       <div class="product-body">
         <h3>${escapeHtml(p.title)}</h3>
