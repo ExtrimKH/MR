@@ -193,7 +193,7 @@ function cardMeta(p) {
   };
   plain(p.partType);
   plain(p.carType);
-  plain(p.productType);
+  // тип товара (Машина/Деталь/Карточка) на витрине не показываем
   return parts.length ? `<div class="prod-meta">${parts.join("")}</div>` : "";
 }
 
