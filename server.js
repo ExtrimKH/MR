@@ -240,7 +240,7 @@ function recordFail(ip) {
   loginAttempts.set(ip, rec);
 }
 
-const RARITIES = ["None", "Epic", "Legendary"];
+const RARITIES = ["None", "Rare", "Epic", "Legendary"];
 const CAR_TYPES = ["None", "Road", "Sport", "Muscle", "Vintage"];
 const PRODUCT_TYPES = ["None", "Машина", "Деталь", "Карточка"];
 const PART_TYPES = [

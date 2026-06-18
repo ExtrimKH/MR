@@ -77,7 +77,13 @@ function card(p, i = 0) {
     ? `<p class="desc">${escapeHtml(p.description)}</p>`
     : "";
   const rcls =
-    p.rarity === "Legendary" ? "r-leg" : p.rarity === "Epic" ? "r-epic" : "";
+    p.rarity === "Legendary"
+      ? "r-leg"
+      : p.rarity === "Epic"
+      ? "r-epic"
+      : p.rarity === "Rare"
+      ? "r-rare"
+      : "";
   return `
     <article class="product ${rcls}" style="animation-delay:${delay}s">
       <div class="product-img">${img}</div>
@@ -137,6 +143,7 @@ function fmtInline(s) {
       `${pre}<a href="https://t.me/${u}" target="_blank" rel="noopener">@${u}</a>`
   );
   s = s
+    .replace(/\bRare\b/g, '<span class="rar rar-rare">Rare</span>')
     .replace(/\bEpic\b/g, '<span class="rar rar-epic">Epic</span>')
     .replace(/\bLegendary\b/g, '<span class="rar rar-leg">Legendary</span>');
   return s;
@@ -154,6 +161,7 @@ function renderWeBuy(text) {
 // подсветка ключевых слов в строках "Что мы покупаем"
 function highlight(s) {
   return s
+    .replace(/\bRare\b/g, '<span class="rar rar-rare">Rare</span>')
     .replace(/Epic/g, '<span class="rar rar-epic">Epic</span>')
     .replace(/Legendary/g, '<span class="rar rar-leg">Legendary</span>')
     .replace(/(\d[\d.,]*\s*\$?SOL)/g, "<b>$1</b>");
@@ -170,7 +178,12 @@ function cardMeta(p) {
   const title = (p.title || "").trim().toLowerCase();
   const parts = [];
   if (p.rarity && p.rarity !== "None") {
-    const cls = p.rarity === "Legendary" ? "rar-leg" : "rar-epic";
+    const cls =
+      p.rarity === "Legendary"
+        ? "rar-leg"
+        : p.rarity === "Rare"
+        ? "rar-rare"
+        : "rar-epic";
     parts.push(`<span class="rar ${cls}">${p.rarity}</span>`);
   }
   // не показываем значение, если оно совпадает с названием товара
