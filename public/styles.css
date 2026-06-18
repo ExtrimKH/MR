@@ -511,7 +511,17 @@ button.danger:hover { background: #dc2626; }
 
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; top: auto; }
+  /* блоки — наверх, над товарами */
+  .sidebar { position: static; top: auto; order: -1; }
+  /* фильтры — сеткой 2 в ряд, сортировка снизу на всю ширину */
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+  }
+  .filters label { margin: 0; }
+  .filters select { width: 100%; min-width: 0; }
+  .filters label:last-child { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) {
   .admin-item { flex-wrap: wrap; }
